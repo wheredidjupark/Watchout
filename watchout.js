@@ -110,11 +110,16 @@ var createEnemy = function() {
 }
 
 var asteroidMove = function() {
-    d3.selectAll('.asteroids').each(function() {
-        d3.select(this).transition().duration(1500)
-            .attr('cx', randX())
-            .attr('cy', randY());
-    });
+    return function() {
+        d3.selectAll('.asteroids').each(function() {
+            d3.select(this).transition().duration(1500)
+                .attr('cx', randX())
+                .attr('cy', randY());
+        });
+        d3.timer(asteroidMove(), 1500);
+        return true;
+    }
+
 };
 
 //kinda working collisions but with bugs 
@@ -171,7 +176,7 @@ var game = function() {
     for (var i = 0; i < settings.nAsteroid; i++) {
         createEnemy();
     }
-    setInterval(asteroidMove, 1500);
+    d3.timer(asteroidMove(), 1500);
     d3.timer(gameLoop(), 1000);
 };
 
