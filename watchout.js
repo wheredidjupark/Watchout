@@ -2,7 +2,7 @@
 var settings = {
     height: window.innerHeight,
     width: window.innerWidth,
-    nAsteroid: 40,
+    nAsteroid: 30,
     rAsteroid: 20,
     rPlayer: 7.5
 };
@@ -18,14 +18,12 @@ var player = {
     y: settings.height / 2,
     r: 7.5
 };
-// var axes = {
-//     x: function() {
-//         d3.scale.linear().domain([0, 100]).range([0, settings.width]);
-//     },
-//     y: function() {
-//         d3.scale.linear().domain([0, 100]).range([0, settings.height]);
-//     }
-// };
+/*
+var enemy = {
+    n: 60,
+    rEnemy: 7.5
+};
+*/
 var randX = function() {
 
     return Math.random() * settings.width;
@@ -38,6 +36,8 @@ var randY = function() {
 
 };
 
+
+//not necessary to wrap the d3 functions in a function but RECOMMENDED
 var gameBoard = function() {
     d3.select('body').append('svg:svg')
         .attr('width', settings.width)
@@ -48,8 +48,6 @@ var gameBoard = function() {
             'background-color': '#eeeeee'
         });
 };
-
-
 
 var updateScores = function() {
 
@@ -63,13 +61,6 @@ var updateScores = function() {
     d3.select('.high span').text(stats.high_score.toString());
 };
 
-
-
-
-
-
-
-
 var createPlayer = function() {
 
     d3.select('.gameBoard').append('svg:circle')
@@ -78,13 +69,11 @@ var createPlayer = function() {
         .attr('r', settings.rPlayer)
         .attr('class', 'player')
         .style({
-            // 'position': 'absolute',
             'fill': 'orange'
         });
-
 };
 
-var mousemove = function() {
+var movePlayer = function() {
     d3.select('.gameBoard').on('mousemove', function() {
         var location = d3.mouse(this);
         player.x = location[0];
@@ -98,16 +87,24 @@ var mousemove = function() {
 
 
 var createEnemy = function() {
+
+var colors = ["red", "orange", "yellow","green","blue","indigo","violet"];
     d3.select('.gameBoard').append('svg:circle')
         .attr('r', settings.rAsteroid)
         .attr('class', 'asteroids')
         .attr('cx', randX())
         .attr('cy', randY())
         .style({
-            'fill': 'black',
+            'fill': colors[Math.floor(Math.random()*colors.length)]
             // 'position': 'absolute'
         });
-}
+
+        //d3.select('.asteroids').insert('svg:image').attr("xlink:href", "asteroid.png");
+
+
+
+
+};
 
 var asteroidMove = function() {
     return function() {
@@ -118,43 +115,42 @@ var asteroidMove = function() {
         });
         d3.timer(asteroidMove(), 1500);
         return true;
-    }
+    };
 
 };
 
-//kinda working collisions but with bugs 
-// d3.selectAll('.asteroids').each(function() {
-
-//     d3.select(this).on('mouseenter', function() {
-//         stats.collisions++;
-//         d3.select('.collisions span').text(stats.collisions);
-//     });
-// });
-
 var collideCheck = function() {
+
+    //kinda working collisions but with bugs 
+    // d3.selectAll('.asteroids').each(function() {
+
+    //     d3.select(this).on('mouseenter', function() {
+    //         stats.collisions++;
+    //         d3.select('.collisions span').text(stats.collisions);
+    //     });
+    // });
 
     d3.selectAll('.asteroids').each(function() {
         var enemy = d3.select(this);
-        var enemyX = parseInt(enemy.attr("cx"));
-        var enemyY = parseInt(enemy.attr("cy"));
-        var enemyR = parseInt(enemy.attr("r"));
+        var enemyX = parseFloat(enemy.attr("cx"));
+        var enemyY = parseFloat(enemy.attr("cy"));
+        var enemyR = parseFloat(enemy.attr("r"));
 
         var player = d3.select('.player');
-        var playerX = parseInt(player.attr("cx"));
-        var playerY = parseInt(player.attr("cy"));
-        var playerR = parseInt(player.attr("r"));
+        var playerX = parseFloat(player.attr("cx"));
+        var playerY = parseFloat(player.attr("cy"));
+        var playerR = parseFloat(player.attr("r"));
 
         var distanceX = enemyX - playerX;
         var distanceY = enemyY - playerY;
-        var radii = enemyR + playerR;
+        var distance = enemyR + playerR;
 
-        var collided = (distanceY * distanceY + distanceX * distanceX <= radii * radii);
+        var collided = (Math.sqrt(distanceY * distanceY + distanceX * distanceX) <= distance);
         if (collided) {
             stats.collisions++;
             d3.select('.collisions span').text(stats.collisions);
-            stats.current_score = 0;
-        }
-
+            stats.current_score = 0;  
+        } 
     });
 };
 
@@ -162,8 +158,8 @@ var collideCheck = function() {
 var gameLoop = function() {
     return function() {
         collideCheck();
-        d3.timer(gameLoop(), 10);
-        return "hello"; //to escape from function, you return.
+        d3.timer(gameLoop());
+        return true; //to escape from function, you return true.
     };
 };
 
@@ -171,13 +167,14 @@ var gameLoop = function() {
 var game = function() {
     gameBoard();
     createPlayer();
-    mousemove();
-    setInterval(updateScores, 200);
+    movePlayer();
+    //setInterval(updateScores, 200);
+    d3.timer(updateScores, 100);
     for (var i = 0; i < settings.nAsteroid; i++) {
         createEnemy();
     }
     d3.timer(asteroidMove(), 1500);
-    d3.timer(gameLoop(), 1000);
+    d3.timer(gameLoop());
 };
 
 
