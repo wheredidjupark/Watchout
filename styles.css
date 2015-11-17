@@ -8,3 +8,8 @@ Feel free to use it if you like. */
 	left:0px;
 	z-index: 1;
 }
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
