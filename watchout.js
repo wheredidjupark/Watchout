@@ -185,7 +185,7 @@
         for (var i = 0; i < settings.nAsteroid; i++) {
             createEnemy();
         }
-        d3.timer(asteroidMove(stats.timeInterval), stats.timeInterval);
+        d3.timer(asteroidMove(stats.timeInterval), 1000);
         d3.timer(gameLoop());
     };
 
