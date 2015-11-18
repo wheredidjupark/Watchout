@@ -1,19 +1,22 @@
 /* your beautiful css styling goes here! */
 
+
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
+
 .scoreboard {
-	position: fixed;
-	top:0px;
-	left:0px;
-	z-index: 1;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
 }
 
-html, body {
-	margin: 0;
-	padding: 0;
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
 
-.collided{
-	background-color: red;
+.collided {
+    background-color: red;
 }
