@@ -5,11 +5,17 @@
 Feel free to use it if you like. */
 
 .scoreboard {
-    position: fixed;
+    position: absolute;
     top: 0px;
     left: 0px;
     z-index: 1;
 }
+
+.gameBoard{
+	z-index: 100;
+	opacity: 0.65;
+}
+
 
 html,
 body {
@@ -19,4 +25,10 @@ body {
 
 .collided {
     background-color: red;
+}
+
+footer{
+	text-align: center;
+	font-family: Helvetica;
+	font-size: 10px;
 }
