@@ -13,3 +13,7 @@ html, body {
 	margin: 0;
 	padding: 0;
 }
+
+.collided{
+	background-color: red;
+}
