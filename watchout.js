@@ -124,7 +124,7 @@
                     .attr('cy', randY());
             });
             stats.round++;
-            d3.select(".round").text("Round:" + stats.round);
+            d3.select(".round").text("Round: " + stats.round);
 
             d3.timer(asteroidMove(time - 40), time - 40);
             return true;

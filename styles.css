@@ -9,6 +9,7 @@ Feel free to use it if you like. */
     top: 0px;
     left: 0px;
     z-index: 1;
+    font-family: Helvetica;
 }
 
 .gameBoard{
